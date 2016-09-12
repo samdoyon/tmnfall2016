@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Page Title</title>
+
+</head>
+<body>
+  <span id="reviewsWidget-init" class="reviewsWidget-init hbp-component"></span>
+<h1>TMN</h1>
+<div id="rating-init-here"><span id="loading">LOADING</span></div>
+
+
+
+ <script
+			  src="http://code.jquery.com/jquery-1.12.4.min.js"
+			  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+			  crossorigin="anonymous"></script>
+<script>
+
+$(document).ready(function() {
+var bar = [];
+var foo =  $.ajax({
+       url: "tmn_fall2016.json",
+       dataType: 'json',
+       success: function(results){
+         $.each(results.Section, function(i, Section) {
+      //     console.log(this);
+          bar.push(this);
+
+
+          });
+          var htmlStr = "";
+          $.each(bar, function( i, Section ) {
+
+
+          var  linkWordTnString = (Section.article);
+
+
+        //   console.log(this);
+           htmlStr += "<hr class=\"featurette-divider\" id=\"\">\n";
+           htmlStr += "<section>\n";
+           htmlStr += "<h4>" + this.h1 + "</h4>\n";
+
+
+          $.each(linkWordTnString, function(j, article){
+            this.Newdata = [];
+           console.log(this);
+
+            var splitLinkWordTnString = article.Data[1].split(' ',  4);
+            this.Newdata.Id = splitLinkWordTnString[0].substring(1);
+            this.Newdata.Pages  = splitLinkWordTnString[1].substring(1);
+            this.Newdata.Tn = splitLinkWordTnString[3];
+            var pagesOrWords = "";
+            var tNLabel = "";
+            if( this.Data[0].indexOf('Web Article') >= 0){
+             pagesOrWords = "words";
+           }else{
+            pagesOrWords = "pages";
+            }
+            if(this.Newdata.Tn){
+              tNLabel = " <span class=\"label\">TN</span>"
+            }
+             htmlStr += "<article>\n";
+            htmlStr += "<h5 class=\"title\">";
+            htmlStr += "<a href=\"http://cb.hbsp.harvard.edu/cbmp/product/";
+            htmlStr += this.Newdata.Id;
+            htmlStr += "-PDF-ENG\" target=\"_blank\">";
+            htmlStr += this.Title;
+            htmlStr += "</a></h5>\n";
+            htmlStr += "<p class=\"subtitle muted\">";
+            htmlStr += this.Author;
+            htmlStr += "<br />\n";
+            htmlStr += this.Data[0] + " / #" + this.Newdata.Id + " / (";
+            htmlStr += this.Newdata.Pages + " " + pagesOrWords + ") </p>\n"
+            htmlStr += "</p>\n"
+            htmlStr += "<p class=\"new-description\">";
+            htmlStr += this.Description;
+
+            htmlStr += tNLabel;
+            htmlStr += "</p>\n"
+            htmlStr += "</article>\n"
+        })
+            htmlStr += "</section>\n\n\n";
+           });
+   console.log( htmlStr)
+        }
+      });
+
+
+
+
+
+
+
+    })
+
+
+
+
+
+    $(document).ajaxStart(function () {
+           $("#loading").show();
+       }).ajaxStop(function () {
+           $("#loading").hide();
+       });
+
+
+
+</script>
+
+
+</body>
+
+</html>
